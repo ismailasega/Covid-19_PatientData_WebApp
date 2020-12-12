@@ -7,7 +7,7 @@ const patientSchema = new mongoose.Schema({
     surname:String,
     givenName:String,
     dob:String,
-    phone:Number,
+    phone:String,
     IdCard:String,
     residence:String,
     occupation:String,

@@ -1,0 +1,48 @@
+body{
+    background: url('/images/login.jpg') no-repeat;
+    background: cover;
+    font-family: Arial, Helvetica, sans-serif;
+   
+}
+
+/**Login**/
+.login {
+    width: 450px;
+    position: absolute;
+	top:80px;
+	left: 0;
+    right: 0;
+	margin: auto;
+    border-radius: 10px;
+    box-shadow: 0 0 30px #00000077;
+    background-color: rgba(255, 255, 255, 0.822);
+}
+.logincontent{
+    width: 400px;
+    margin: auto;
+    height: auto;
+}
+
+.head h5{
+    font-weight: bolder;
+    color: black;
+    font-size: 30px;
+}
+.head {
+    text-align: center;
+    color: black;
+}
+
+.container{
+    padding-top: 30px;
+}
+
+.btn1{
+    background-color: #000;
+    color: #fff;
+    font-size: 15px;
+    font-weight: bold;
+    border: 1px solid #000;
+    border-radius: 5px;
+    padding: 10px 180px 10px 180px;
+}

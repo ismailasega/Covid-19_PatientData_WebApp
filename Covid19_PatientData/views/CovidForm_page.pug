@@ -14,14 +14,6 @@ nav.fixed-top
       p Ministry of Health
       h5 Covid-19 (CORONA VIRUS)
       p virus-Test Registration Form
-    //- if status
-    //-   .alert.alert-success
-    //-     strong Success!
-    //-     |  #{status}
-    //- else if status2
-    //-   .alert.alert-danger
-    //-     strong Failed!
-    //-     |  #{status2}
     .content
       form(name="covid19Data" action="/RegData" method="POST" onsubmit="return validate()" autocomplete="off")
         .form-row

@@ -16,6 +16,7 @@ const expressSession =require('express-session')({
 
 //Declearing routes
 const data =require('./routes/dataRoute');
+const login =require('./routes/loginroute');
 
 //Initilising app
 const app =express();
@@ -50,6 +51,7 @@ app.set('views', path.join(__dirname, 'views'));
 
 //Telling App to use routes delcared in the routes folder 
 app.use('/', data);
+app.use('/', login);
 
 //Handling non-existant route / path
 app.get('*', (req,res)=>{

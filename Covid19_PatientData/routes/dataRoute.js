@@ -30,7 +30,8 @@ router.get('/patientData', async(req, res)=>{
         const patients = await PatientData.find();
         res.render('PatientData_page',{patients: patients, status: req.flash('status'), status2: req.flash('status2')});
         }catch(err){
-            res.render('RegStudent_page', {status2:'Failed to retrive student details'});
+            rreq.flash('status2', 'unable to retrive patient data');
+            res.redirect('back');
         }
     // }else{
     //     res.redirect('/login');

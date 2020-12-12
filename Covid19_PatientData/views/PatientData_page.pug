@@ -1,0 +1,90 @@
+meta(charset="UTF-8")
+meta(name="viewport", content="width=device-width,initial-scale=1")
+title PatientData
+link(rel="stylesheet", type="text/css", href="/css/form.css")
+link(rel="stylesheet", type="text/css", href="/bootstrap/css/bootstrap.min.css")
+nav.fixed-top
+  ul
+    li
+      a(href="/logout") Logout
+.cont2
+  .container
+    img(src='/images/form-header-image.png' width="970px")
+    .head
+      p Ministry of Health
+      h5 Patient Data
+    if status.length
+      .alert.alert-success
+        strong Success!
+        |  #{status}
+    else if status2.lenght
+      .alert.alert-danger
+        strong Failed!
+        |  #{status2}
+    .container-fluid
+        //- Table section
+        .table-con.text-color.borders
+            a.btn1(href='/RegisterPatient') Add Patient Data
+            br
+            .tcontainer
+            table#dbdatatable.tb-body.table.table-striped.table-bordered(style="width:100%")
+                thead.tb-color
+                    tr
+                        th(scope="col") PatientNo.
+                        th(scope="col") FullName
+                        th(scope="col") Nationality
+                        th(scope="col") Passport/NIN_No
+                        th(scope="col") DateOfBirth
+                        th(scope="col") Gender
+                        th(scope="col") PhoneNumber
+                        th(scope="col") Occupation
+                        th(scope="col") Address
+                        th(scope="col") RegistrationDate
+                        th(scope="col") Action
+                    tbody
+                        if patients.length
+                        each patient in patients
+                          tr
+                              td #{patient.patient}
+                              td #{patient.surname +' '+ patient.givenName}
+                              td #{patient.nationality}
+                              td #{patient.IdCard}
+                              td #{patient.dob}
+                              td #{patient.gender}
+                              td #{patient.phone}
+                              td #{patient.occupation}
+                              td #{patient.residence}
+                              td #{patient.createdAt}
+                              td
+                                form(method="post" action='/deletePatient')
+                                  input(type="hidden", name="id", value=patient._id)
+                                  button.btn2(type="submit") 
+                                    i.fa.fa-trash-o
+        br
+//- Footer
+.copyright
+    | 
+
+    script(language="JavaScript", type="text/javascript").
+        
+        var now = new Date();
+                var year = now.getYear();
+                if( year < 2000 ) { year = year + 1900; }
+                document.write( year );
+        
+    strong
+        span  © Minsirty Of health
+    | . All Rights Reserved        
+
+script(src="https://code.jquery.com/jquery-3.5.1.slim.min.js", integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj", crossorigin="anonymous")
+script(src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js", integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx", crossorigin="anonymous")
+script(src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js")
+script(src="https://cdn.datatables.net/1.10.22/js/dataTables.bootstrap4.min.js")
+script(src="https://cdn.datatables.net/scroller/2.0.3/js/dataTables.scroller.min.js")
+//- setting a table to be searchable, display a set of rows and also next buttons
+script.
+  
+  $(document).ready(function() {
+          $('#dbdatatable').DataTable( {
+          });
+    });

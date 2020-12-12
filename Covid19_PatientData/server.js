@@ -3,7 +3,15 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const path = require('path');
+const flash = require('connect-flash');
+
 require('dotenv').config();
+//Expression
+const expressSession =require('express-session')({
+  secret: 'secret',
+  resave: false,
+  saveUninitialized: false
+});
 
 //Declearing routes
 const data =require('./routes/dataRoute');
@@ -32,6 +40,13 @@ app.use(bodyParser.urlencoded({extended: true}));
 
 //Tellin the App to use folders and files within the public folder 
 app.use(express.static('public'));
+app.use(expressSession);
+app.use(flash());
+app.use(function(req, res, next){
+  res.locals.status = req.flash('status');
+  res.locals.status2 = req.flash();
+  next();
+});
 
 //Path
 app.set('view engine', 'pug');

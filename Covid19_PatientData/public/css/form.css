@@ -1,28 +1,70 @@
+@import "https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css";
+@import "https://cdn.datatables.net/1.10.21/css/dataTables.bootstrap4.min.css";
 body{
     background: #edf5e7;
     font-family: Arial, Helvetica, sans-serif;
     font-size: 15px;
 }
+
+/**Nav Bar**/
+nav{
+    background:  #000000;
+    line-height: 20px;
+    position: fixed;
+    width: 100%;
+    box-shadow: 0 0 30px #00000077;
+}
+
+.fixed-top {
+	position: fixed;
+	top: 0;
+	right: 0;
+	left: 0;
+}
+
+nav ul{
+    float:right;
+    list-style: none;
+    margin-right: 20px;
+}
+
+nav ul li{
+    line-height: 25px;
+    margin: 0 10px;
+    margin-top: 10px;
+
+}
+
+nav ul li a{
+    color: #fff;
+    font-size: 15px;
+    padding: 6px 10px;
+    font-weight: 500;
+}
+
+nav ul li a:hover{
+    color: yellow;
+    text-decoration: none;
+    transition: -0.5s;
+}
 /**Access page container**/
 .cont {
     width: 800px;
-    height: 800px;
+    height: auto;
     position: absolute;
-	top:160px;
-	bottom: 0;
+	top:60px;
 	left: 0;
 	right: 0;
 	margin: auto;
     border-radius: 10px;
     box-shadow: 0 0 30px #00000077;
-    background: url('/img/login.jpg');
     background-size: cover;
 
 }
 .content{
     width: 750px;
     margin: auto;
-    height: 600px;
+    height: auto;
 }
 .head h5{
     font-weight: bolder;
@@ -44,4 +86,101 @@ body{
 
 .error{
     color: red;
+}
+
+fieldset legend{ 
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 15px;
+}
+
+fieldset label{
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 15px;
+    margin-right: 60px;
+}
+
+/**Patient Table**/
+.cont2 {
+    width: 1000px;
+    height: auto;
+    position: absolute;
+	top:60px;
+	left: 0;
+	right: 0;
+	margin: auto;
+    border-radius: 10px;
+    box-shadow: 0 0 30px #00000077;
+}
+/**Table Properties**/
+.borders{    
+    width: auto;
+    height: auto;
+    border: 1px solid lightgray;
+    border-radius: 10px 10px 10px;
+    padding: 10px;
+    background-color: rgba(245, 245, 245, 0.438);
+}
+.btn1{
+    line-height: 15px;
+    padding: 10px 10px 10px 10px;
+    background-color: #000;
+    color: #fff;
+    border-radius: 5px;
+}
+.btn1:hover{
+    line-height: 15px;
+    padding: 10px 10px 10px 10px;
+    background-color: grey;
+    color: #000;
+    border-radius: 5px;
+    text-decoration: none;
+}
+.btn2{
+    line-height: 15px;
+    padding: 5px 5px 5px 5px;
+    border: 1px solid red;
+    background-color: red;
+    border-radius: 5px;
+}
+.btn2 .fa{
+    color: #fff;
+}
+.tb-color{
+    color: #fff;
+    background: #000;
+    font-size: 15px;
+}
+
+.tb-body{
+    background: #fff;
+    overflow-x:scroll;
+    display:block;
+}
+
+.table-con{
+    padding-top: 15px;
+}
+
+.tcontainer{
+    padding-top: 30px;
+}
+.tab{
+    background: none;
+}
+
+.text-color{
+    color: #000;
+}
+
+
+/**Footer**/
+
+.copyright {
+    text-align: center;
+    right:0;
+    left:0;
+    bottom: 0;
+    margin: auto;
+    position: relative;
+    color: #000;
 }

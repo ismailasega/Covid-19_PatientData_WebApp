@@ -3,6 +3,10 @@ meta(name="viewport", content="width=device-width,initial-scale=1")
 title PatientData
 link(rel="stylesheet", type="text/css", href="/css/form.css")
 link(rel="stylesheet", type="text/css", href="/bootstrap/css/bootstrap.min.css")
+nav.fixed-top
+  ul
+    li
+      a(href="/logout") Logout
 .cont
   .container
     img(src='/images/form-header-image.png' width="770px")
@@ -10,16 +14,16 @@ link(rel="stylesheet", type="text/css", href="/bootstrap/css/bootstrap.min.css")
       p Ministry of Health
       h5 Covid-19 (CORONA VIRUS)
       p virus-Test Registration Form
-    if status
-      .alert.alert-success
-        strong Success!
-        |  #{status}
-    else if status2
-      .alert.alert-danger
-        strong Failed!
-        |  #{status2}
+    //- if status
+    //-   .alert.alert-success
+    //-     strong Success!
+    //-     |  #{status}
+    //- else if status2
+    //-   .alert.alert-danger
+    //-     strong Failed!
+    //-     |  #{status2}
     .content
-      form(name="covid19Data" action="/RegData" method="POST" onsubmit="return validate()")
+      form(name="covid19Data" action="/RegData" method="POST" onsubmit="return validate()" autocomplete="off")
         .form-row
           .form-group.col-md-6
             label(for="inputSurname") Surname
@@ -47,19 +51,32 @@ link(rel="stylesheet", type="text/css", href="/bootstrap/css/bootstrap.min.css")
             label(for="inputnation") Nationality
             input.form-control(type="text" name="nationality")
             #nation.error
-        .fieldset.form-group
-          .row
-            legend.col-form-label.col-sm-2.pt-0 Gender
-              .col-sm-10
-                .form-check
+        .form-row
+          .form-group.col-md-6
+            label(for="inputid") Passport No. / NIN No(Ugandans Only)
+            input.form-control(type="text" name="IdCard")
+            #cardNo.error
+          .form-group.col-md-6
+            label(for="inputContact") Contact Number
+            input.form-control(type="text" name="phone")
+            #contact.error
+        .form-group
+          fieldset
+            legend Gender 
+              .form-group.col-md-6
+                .form-check.custom-control-inline
                   input.form-check-input(type="radio" name="gender" value='Male') 
                   label.form-check-label Male
-                .form-check 
+                .form-check.custom-control-inline
                   input.form-check-input(type="radio" name="gender" value='Female') 
                   label.form-check-label Female
             #gen.error
         .form-row
-          .form-group.col-md-12
+          .form-group.col-md-6
+            label(for="inputpatient") Patient No.
+            input.form-control(type="text" name="patient" value="MH"+ Date.now() readonly)
+            #patientNo.error
+          .form-group.col-md-6
             label(for="inputcategory") Category
             select.form-control(name="category", type="text")
               option(value="Default" placeholder="" selected) --Select Category--
@@ -69,6 +86,7 @@ link(rel="stylesheet", type="text/css", href="/bootstrap/css/bootstrap.min.css")
               option Volunteer
             #cat.error
         button.btn.btn1.btn-primary(type="submit") Register
+      br
 
 script(src="js/formValidation.js")
 script(src="https://code.jquery.com/jquery-3.5.1.slim.min.js", integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj", crossorigin="anonymous")

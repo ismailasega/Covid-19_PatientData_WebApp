@@ -1,17 +1,29 @@
 const express = require('express');
 const router = express.Router();
 
-const PatientData = require('../models/PatientData')
+const PatientData = require('../models/PatientData');
+const Users = require('../models/Users');
 
 
 router.get('/RegisterPatient', (req, res)=>{
     res.render('CovidForm_page', {status:'', status2:''});
 });
 
-// router.get('/patientData', (req, res)=>{
-//     res.render('PatientData_page', {status:'', status2:''});
-// });
-
+//Creating user credentials
+router.post('/user', async(req,res)=>{
+        try{
+            const user = new Users(req.body);
+            await Users.register(user, req.body.password, (err)=>{
+                if (err){
+                    throw err
+                }
+                res.redirect('/login')
+            })
+        }catch(err){
+            res.status(400).send("Failed to add user");
+        }
+});
+  
 router.post('/RegData', async(req, res)=>{
     try{
         const patientsData = new PatientData(req.body);

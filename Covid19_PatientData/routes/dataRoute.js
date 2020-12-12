@@ -19,7 +19,8 @@ router.post('/RegData', async(req, res)=>{
         req.flash('status', 'Patient Data Added Succesfully');
         res.redirect('/patientData');
     }catch(err){
-        res.render('PatientData_page', {status2:'Patient Data not Added'});
+        req.flash('status2', 'Patient Data Not Added');
+        res.redirect('/patientData');
     }
 })
 
@@ -41,9 +42,11 @@ router.post('/deletePatient', async(req, res)=>{
     // if(req.session.user){
         try{
             await PatientData.deleteOne({_id: req.body.id});
+            req.flash('status', 'Patient Data Deleted Succesfully');
             res.redirect('back');
         }catch(err){
-            res.status(400).send("unable to delete patient data")
+            req.flash('status2', 'unable to delete patient data');
+            res.redirect('back');
         }
     // }else{
     //     res.redirect('/login');

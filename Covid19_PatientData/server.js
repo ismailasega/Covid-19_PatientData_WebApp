@@ -3,12 +3,13 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const path = require('path');
-const flash = require('connect-flash');
+const flush = require('connect-flash');
 
 require('dotenv').config();
 //Expression
 const expressSession =require('express-session')({
   secret: 'secret',
+  cookie: {maxAge : 60000},
   resave: false,
   saveUninitialized: false
 });
@@ -41,12 +42,7 @@ app.use(bodyParser.urlencoded({extended: true}));
 //Tellin the App to use folders and files within the public folder 
 app.use(express.static('public'));
 app.use(expressSession);
-app.use(flash());
-app.use(function(req, res, next){
-  res.locals.status = req.flash('status');
-  res.locals.status2 = req.flash();
-  next();
-});
+app.use(flush());
 
 //Path
 app.set('view engine', 'pug');

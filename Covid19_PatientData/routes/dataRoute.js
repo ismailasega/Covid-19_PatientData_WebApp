@@ -12,11 +12,12 @@ router.get('/RegisterPatient', (req, res)=>{
     res.render('CovidForm_page');
 });
 
-//Creating user credentials
+//Creating Admin User credentials
 router.post('/user', async(req, res)=>{
         try{
             const user = new Users(req.body);
             user.password = bcrypt.hashSync(req.body.password, 10);
+            user.role='admin'
             await user.save();
                 req.flash('status', 'User credentials created successfully, you can now login');
                 res.redirect('/login')

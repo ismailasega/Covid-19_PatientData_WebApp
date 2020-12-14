@@ -1,13 +1,14 @@
 const express = require('express');
 const router = express.Router();
 const jwt = require('jsonwebtoken');
+var bcrypt = require("bcrypt");
 
 //Declaring users
-const Users = require('../models/Users')
+const Users = [require('../models/Users')];
 
 //Tokens
-const accessTokenSecret = 'accesstoken';
-const refreshTokenSecret = 'refreshtoken';
+const accessTokenSecret = 'myaccess-secret';
+const refreshTokenSecret = 'myrefresh-secret';
 const refreshTokens = [];
 
 router.get('/login', (req, res)=>{
@@ -19,21 +20,18 @@ router.post('/login', (req, res) => {
     const {username, password} = req.body;
 
     // filter user from the users array by username and password
-    const user = Users.find(u => { return u.username === username && u.password === password });
-
+    const user = Users.find(u => { return u.username == username && u.password == password});
     if (user) {
         // generate an access token
-        const accessToken = jwt.sign({ username: user.username, role: user.role }, accessTokenSecret, { expiresIn: '20m' });
+        const accessToken  = jwt.sign({ username: user.username, role: user.role }, accessTokenSecret, { expiresIn: '20m' });
         const refreshToken = jwt.sign({ username: user.username, role: user.role }, refreshTokenSecret);
 
         refreshTokens.push(refreshToken);
-
-        res.json({
-            accessToken,
-            refreshToken
-        });
-    } else {
-        res.send('Username or password incorrect');
+        res.redirect('/patientData');
+    
+    }else{
+        req.flash('status2', 'User Credentials are Invalid');
+        res.redirect('/login');
     }
 });
 
@@ -65,7 +63,7 @@ router.get('/logout', (req, res) => {
     const { token } = req.body;
     refreshTokens = refreshTokens.filter(token => t !== token);
 
-    res.send("Logout successful");
+    res.redirect("/login");
 });
 
 

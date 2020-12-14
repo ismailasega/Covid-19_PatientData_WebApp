@@ -2,20 +2,21 @@ const express = require('express');
 const router = express.Router();
 const jwt = require('jsonwebtoken');
 
-const Users = require('../models/PatientData')
+//Declaring users
+const Users = require('../models/Users')
 
 //Tokens
-const accessTokenSecret = 'somerandomaccesstoken';
-const refreshTokenSecret = 'somerandomstringforrefreshtoken';
+const accessTokenSecret = 'accesstoken';
+const refreshTokenSecret = 'refreshtoken';
 const refreshTokens = [];
 
 router.get('/login', (req, res)=>{
-    res.render('login_page');
+    res.render('login_page', {status: req.flash('status'), status2: req.flash('status2')});
 });
 
 router.post('/login', (req, res) => {
     // read username and password from request body
-    const { username, password } = req.body;
+    const {username, password} = req.body;
 
     // filter user from the users array by username and password
     const user = Users.find(u => { return u.username === username && u.password === password });

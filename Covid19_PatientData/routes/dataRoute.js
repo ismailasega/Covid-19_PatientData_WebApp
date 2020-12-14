@@ -1,26 +1,28 @@
 const express = require('express');
 const router = express.Router();
 
+//hashing password
+const bcrypt = require('bcrypt');
+
 const PatientData = require('../models/PatientData');
 const Users = require('../models/Users');
 
 
 router.get('/RegisterPatient', (req, res)=>{
-    res.render('CovidForm_page', {status:'', status2:''});
+    res.render('CovidForm_page');
 });
 
 //Creating user credentials
-router.post('/user', async(req,res)=>{
+router.post('/user', async(req, res)=>{
         try{
             const user = new Users(req.body);
-            await Users.register(user, req.body.password, (err)=>{
-                if (err){
-                    throw err
-                }
+            user.password = bcrypt.hashSync(req.body.password, 10);
+            await user.save();
+                req.flash('status', 'User credentials created successfully, you can now login');
                 res.redirect('/login')
-            })
         }catch(err){
-            res.status(400).send("Failed to add user");
+            req.flash('status2', 'Failed to create user credentials');
+            res.redirect("/login");
         }
 });
   

@@ -31,9 +31,12 @@ router.post('/login', async(req, res) => {
             const refreshToken = jwt.sign({ username: user.username, role: user.role }, refreshTokenSecret);
             refreshTokens.push(refreshToken);
             res.redirect('/patientData');
+        }else if (user.password != passWord){
+            req.flash('status2', 'Invalid Password');
+            res.redirect('/login');
         }
     }catch(err){
-        req.flash('status2', 'User Credentials are Invalid');
+        req.flash('status2', 'Invalid Username');
         res.redirect('/login');
     }
 });

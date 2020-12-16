@@ -27,10 +27,7 @@ router.post('/login', async(req, res) => {
         const isMatch = bcrypt.compareSync(passWord, user.password);
         if (isMatch) {
             // generate an access token
-            const accessToken  = jwt.sign({ username: user.username, role: user.role }, accessTokenSecret, { expiresIn: '20m' });
-            const refreshToken = jwt.sign({ username: user.username, role: user.role }, refreshTokenSecret);
-            refreshTokens.push(refreshToken);
-            res.redirect('/patientData');
+            jwt.sign({ username: user.username, role: user.role }, accessTokenSecret, { expiresIn: '20m' }); 
         }else if (user.password != passWord){
             req.flash('status2', 'Invalid Password');
             res.redirect('/login');
@@ -41,28 +38,29 @@ router.post('/login', async(req, res) => {
     }
 });
 
-router.post('/token', (req, res) => {
-    const { token } = req.body;
+const authrnticateJWT = (req, res, next) => {
 
-    if (!token) {
-        return res.sendStatus(401);
-    }
+    const authHeader = req.headers.authorization;
 
-    if (!refreshTokens.includes(token)) {
-        return res.sendStatus(403);
-    }
+    if (authHeader) {
+        const token = authHeader.split(' ')[1];
 
-    jwt.verify(token, refreshTokenSecret, (err, user) => {
-        if (err) {
-            return res.sendStatus(403);
-        }
+        jwt.verify(token, accessTokenSecret, (err, user) => {
+            if (err) {
+                return res.sendStatus(403);
+            }
 
-        const accessToken = jwt.sign({ username: user.username, role: user.role }, accessTokenSecret, { expiresIn: '20m' });
-
-        res.json({
-            accessToken
+        req.user = user;
+        next();
         });
-    });
+    } else {
+        req.flash('status2', 'Unauthorized, Please enter credentials to proceed');
+        res.redirect("/login");
+    }
+}
+
+router.get('/RegisterPatient', authrnticateJWT, (req, res)=>{
+    res.render('CovidForm_page'); 
 });
 
 //logout

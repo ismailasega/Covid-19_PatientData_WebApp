@@ -7,16 +7,6 @@ const bcrypt = require('bcrypt');
 const PatientData = require('../models/PatientData');
 const Users = require('../models/Users');
 
-// const {verify} = require('../routes/loginroute')
-
-// router.get('/RegisterPatient', (req, res)=>{
-//     res.render('CovidForm_page');
-//     // {
-//     //     req.flash('status2', 'Unauthorized, Please enter credentials to proceed');
-//     //     res.redirect("/login");
-//     // }
-// });
-
 
 //Creating Admin User credentials
 router.post('/user', async(req, res)=>{
@@ -24,6 +14,7 @@ router.post('/user', async(req, res)=>{
             const user = new Users(req.body);
             user.password = bcrypt.hashSync(req.body.password, 10);
             user.role='admin'
+            console.log(user)
             await user.save();
                 req.flash('status', 'User credentials created successfully, you can now login');
                 res.redirect('/login')

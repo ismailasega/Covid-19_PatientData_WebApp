@@ -16,6 +16,7 @@ router.get('/login', (req, res)=>{
     res.render('login_page', {status: req.flash('status'), status2: req.flash('status2')});
 });
 
+
 //Authenticating login
 router.post('/login', async(req, res) => {
     try{
@@ -27,39 +28,48 @@ router.post('/login', async(req, res) => {
         const isMatch = bcrypt.compareSync(passWord, user.password);
         if (isMatch) {
             // generate an access token
-            jwt.sign({ username: user.username, role: user.role }, accessTokenSecret, { expiresIn: '20m' }); 
+            const accessToken = jwt.sign({ username: user.username, role: user.role }, accessTokenSecret, { expiresIn: '1m' });
+            jwt.sign({ username: user.username, role: user.role }, refreshTokenSecret);
+            res.header('auth-token', accessToken)
+            res.redirect('/RegisterPatient');
+            
+            
+
         }else if (user.password != passWord){
-            req.flash('status2', 'Invalid Password');
+            req.flash('status2', 'Invalid password, please try again');
             res.redirect('/login');
         }
     }catch(err){
-        req.flash('status2', 'Invalid Username');
+        req.flash('status2', 'Invalid username, please try again');
         res.redirect('/login');
     }
-});
+})
 
-const authrnticateJWT = (req, res, next) => {
-
-    const authHeader = req.headers.authorization;
-
-    if (authHeader) {
-        const token = authHeader.split(' ')[1];
-
-        jwt.verify(token, accessTokenSecret, (err, user) => {
-            if (err) {
-                return res.sendStatus(403);
-            }
-
-        req.user = user;
-        next();
-        });
-    } else {
+const authenticateJWT = (req, res, next) => {
+    const token = req.header('auth-token')
+    console.log(token)
+    if(!token)
+        req.flash('status2', 'Access Denied');
+        res.redirect('/login')
+    try{
+        if (token) {
+            token = token.split(' ')[1];
+            jwt.verify(token, accessTokenSecret, (err, verified) => {
+                if (err) {
+                    req.flash('status2', 'Forbidden. Please enter credentials to proceed');
+                    res.redirect("/login");
+                }
+            req.user = verified;
+            next();
+        })
+    }
+    }catch (err) {
         req.flash('status2', 'Unauthorized, Please enter credentials to proceed');
         res.redirect("/login");
     }
 }
 
-router.get('/RegisterPatient', authrnticateJWT, (req, res)=>{
+router.get('/RegisterPatient', authenticateJWT, (req, res, next)=>{
     res.render('CovidForm_page'); 
 });
 

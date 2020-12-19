@@ -44,34 +44,6 @@ router.post('/login', async(req, res) => {
     }
 })
 
-function authenticateJWT (req, res, next) {
-    try{
-        const token = req.header('Cookie')
-        console.log(token)
-        if(!token)
-        return req.flash('status2', 'Access Denied').redirect('/login');
-    
-        if (token) {
-            jwt.verify(token, accessTokenSecret, (err, user) => {
-                if (err) {
-                    req.flash('status2', 'Forbidden. Please enter credentials to proceed');
-                    res.redirect("/login");
-                    return;
-                }
-            req.user = user;
-            next();
-        })
-    }
-    }catch (err) {
-        req.flash('status2', 'Unauthorized, Please enter credentials to proceed');
-        res.redirect("/login");
-    }
-}
-
-router.get('/RegisterPatient', authenticateJWT, (req, res)=>{
-    res.render('CovidForm_page'); 
-});
-
 
 //logout
 router.get('/logout', (req, res) => {

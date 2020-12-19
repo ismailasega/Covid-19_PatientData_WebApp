@@ -28,11 +28,10 @@ router.post('/login', async(req, res) => {
         const isMatch = bcrypt.compareSync(passWord, user.password);
         if (isMatch) {
             // generate an access token
-            const accessToken = jwt.sign({ username: user.username, role: user.role }, accessTokenSecret, { expiresIn: '1m' });
+            const accessToken = jwt.sign({ username: user.username, role: user.role }, accessTokenSecret, { expiresIn: '24m' });
             jwt.sign({ username: user.username, role: user.role }, refreshTokenSecret);
-            res.header('auth-token', accessToken)
+            res.header('Authorization', accessToken)
             res.redirect('/RegisterPatient');
-            
             
 
         }else if (user.password != passWord){
@@ -45,21 +44,21 @@ router.post('/login', async(req, res) => {
     }
 })
 
-const authenticateJWT = (req, res, next) => {
-    const token = req.header('auth-token')
-    console.log(token)
-    if(!token)
-        req.flash('status2', 'Access Denied');
-        res.redirect('/login')
+function authenticateJWT (req, res, next) {
     try{
+        const token = req.header('Cookie')
+        console.log(token)
+        if(!token)
+        return req.flash('status2', 'Access Denied').redirect('/login');
+    
         if (token) {
-            token = token.split(' ')[1];
-            jwt.verify(token, accessTokenSecret, (err, verified) => {
+            jwt.verify(token, accessTokenSecret, (err, user) => {
                 if (err) {
                     req.flash('status2', 'Forbidden. Please enter credentials to proceed');
                     res.redirect("/login");
+                    return;
                 }
-            req.user = verified;
+            req.user = user;
             next();
         })
     }
@@ -69,13 +68,14 @@ const authenticateJWT = (req, res, next) => {
     }
 }
 
-router.get('/RegisterPatient', authenticateJWT, (req, res, next)=>{
+router.get('/RegisterPatient', authenticateJWT, (req, res)=>{
     res.render('CovidForm_page'); 
 });
 
+
 //logout
 router.get('/logout', (req, res) => {
-    const { token } = req.body;
+    const { token } = req.header('cookie');
     refreshTokens = refreshTokens.filter(token => t !== token);
 
     res.redirect("/login");

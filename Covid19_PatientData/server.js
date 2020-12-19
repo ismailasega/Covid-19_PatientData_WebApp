@@ -41,6 +41,7 @@ console.log(`Connection error: ${err.message}`);
 //Middleware to be able to use form data
 app.use(bodyParser.urlencoded({extended: true}));
 
+
 //Tellin the App to use folders and files within the public folder 
 app.use(express.static('public'));
 app.use(expressSession);

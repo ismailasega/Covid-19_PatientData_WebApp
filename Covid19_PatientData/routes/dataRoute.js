@@ -7,6 +7,8 @@ const bcrypt = require('bcrypt');
 const PatientData = require('../models/PatientData');
 const Users = require('../models/Users');
 
+const authenticateJWT = require('../routes/loginroute')
+
 
 //Creating Admin User credentials
 router.post('/user', async(req, res)=>{
@@ -14,7 +16,6 @@ router.post('/user', async(req, res)=>{
             const user = new Users(req.body);
             user.password = bcrypt.hashSync(req.body.password, 10);
             user.role='admin'
-            console.log(user)
             await user.save();
                 req.flash('status', 'User credentials created successfully, you can now login');
                 res.redirect('/login')
@@ -24,7 +25,7 @@ router.post('/user', async(req, res)=>{
         }
 });
   
-router.post('/RegData', async(req, res)=>{
+router.post('/RegData', authenticateJWT, async(req, res)=>{
     try{
         const patientsData = new PatientData(req.body);
         await patientsData.save();
@@ -36,7 +37,7 @@ router.post('/RegData', async(req, res)=>{
     }
 })
 
-router.get('/patientData', async(req, res)=>{
+router.get('/patientData', authenticateJWT, async(req, res)=>{
     // if(req.session.user){
         try{
         const patients = await PatientData.find();
@@ -51,7 +52,7 @@ router.get('/patientData', async(req, res)=>{
 });
 
 //Deleting Patient Data
-router.post('/deletePatient', async(req, res)=>{
+router.post('/deletePatient', authenticateJWT, async(req, res)=>{
     // if(req.session.user){
         try{
             await PatientData.deleteOne({_id: req.body.id});

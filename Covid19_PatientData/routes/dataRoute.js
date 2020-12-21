@@ -7,47 +7,48 @@ const bcrypt = require('bcrypt');
 const PatientData = require('../models/PatientData');
 const Users = require('../models/Users');
 
-const accessTokenSecret = require('../routes/loginroute')
+const authenticateJWT = require('../routes/loginroute')
 
-//Login access token verification  
-function authenticateJWT (req, res, next) {
-    try{
-        const token = req.header('Cookie')
-        console.log(token)
-        if(!token){
-            req.flash('status2', 'Access Denied');
-            res.redirect('/login');
-            return
-        }
-        else if (token) {
-            jwt.verify(token, accessTokenSecret, (err, user) => {
-                if (err) {
-                    req.flash('status2', 'Forbidden. Please enter credentials to proceed');
-                    res.redirect("/login");
-                    return
-                }
-            req.user = user;
-            next();
-        })
-    }
-    }catch (err) {
-        req.flash('status2', 'Unauthorized, Please enter credentials to proceed');
-        res.redirect("/login");
-    }
-}
+// //Login access token verification 
+// function authenticateJWT (req, res, next) {
+//     try{
+//         const token = req.cookies.authtoken
+//         console.log(token)
+//         if(!token){
+//             req.flash('status2', 'Access Denied');
+//             res.redirect('/login');
+//             return
+//         }
+//         else if (token) {
+//             jwt.verify(token, accessTokenSecret, (err, access) => {
+//                 if (err) {
+//                     req.flash('status2', 'Forbidden. Please enter credentials to proceed');
+//                     res.redirect("/login");
+//                 }else if (access.user){
+//                     req.user = access.user;
+//                     next();
+//                 }
+//         })
+//     }
+//     }catch (err) {
+//         req.flash('status2', 'Unauthorized, Please enter credentials to proceed');
+//         res.redirect("/login");
+//     }
+// }
 
-//Patient registartion
-router.get('/RegisterPatient', authenticateJWT, (req, res)=>{
-    res.render('CovidForm_page'); 
-});
+// //Patient registartion
+// router.get('/RegisterPatient', authenticateJWT, (req, res)=>{
+//         res.render('CovidForm_page'); 
+// });
 
 
 //Creating Admin User credentials
-router.post('/user', async(req, res)=>{
+router.post('/admin', async(req, res)=>{
         try{
             const user = new Users(req.body);
             user.password = bcrypt.hashSync(req.body.password, 10);
             user.role='admin'
+            user.token=' '
             await user.save();
                 req.flash('status', 'User credentials created successfully, you can now login');
                 res.redirect('/login')

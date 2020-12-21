@@ -28,9 +28,12 @@ router.post('/login', async(req, res) => {
         const isMatch = bcrypt.compareSync(passWord, user.password);
         if (isMatch) {
             // generate an access token
-            const accessToken = jwt.sign({ username: user.username, role: user.role }, accessTokenSecret, { expiresIn: '24m' });
+            const accessToken = jwt.sign({ _id: user.id, username: user.username, role: user.role }, accessTokenSecret, { expiresIn: '24m' });
             jwt.sign({ username: user.username, role: user.role }, refreshTokenSecret);
-            res.header('Authorization', accessToken)
+            res.cookie('authtoken', accessToken, {maxAge:900000, httpOnly: true})
+            console.log(accessToken)
+            
+            //res.header('x-auth-token', accessToken)
             res.redirect('/RegisterPatient');
             
 
@@ -43,6 +46,38 @@ router.post('/login', async(req, res) => {
         res.redirect('/login');
     }
 })
+
+//Login access token verification 
+function authenticateJWT (req, res, next) {
+    try{
+        const token = req.cookies.authtoken
+        console.log(token)
+        if(!token){
+            req.flash('status2', 'Access Denied');
+            res.redirect('/login');
+            return
+        }
+        else if (token) {
+            jwt.verify(token , accessTokenSecret, (err, user) => {
+                if (err) {
+                    req.flash('status2', 'Forbidden. Please enter credentials to proceed');
+                    res.redirect("/login");
+                }
+                req.user = user;
+                next();
+                
+        })
+    }
+    }catch (err) {
+        req.flash('status2', 'Unauthorized, Please enter credentials to proceed');
+        res.redirect("/login");
+    }
+}
+
+//Patient registartion
+router.get('/RegisterPatient', authenticateJWT, (req, res)=>{
+        res.render('CovidForm_page'); 
+});
 
 
 //logout

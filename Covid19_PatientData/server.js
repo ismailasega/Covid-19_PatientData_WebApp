@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const path = require('path');
 const flush = require('connect-flash');
+const cookieParser = require('cookie-parser');
 
 
 require('dotenv').config();
@@ -41,12 +42,14 @@ console.log(`Connection error: ${err.message}`);
 
 //Middleware to be able to use form data
 app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.json())
 
 
 //Tellin the App to use folders and files within the public folder 
 app.use(express.static('public'));
 app.use(expressSession);
 app.use(flush());
+app.use(cookieParser())
 
 //Path
 app.set('view engine', 'pug');

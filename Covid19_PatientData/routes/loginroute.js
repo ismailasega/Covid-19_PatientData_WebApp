@@ -8,8 +8,6 @@ const Users = require('../models/Users');
 
 //Tokens
 const accessTokenSecret = 'myaccess-secret';
-const refreshTokenSecret = 'myrefresh-secret';
-const refreshTokens = [];
 
 //Getting Login in page
 router.get('/login', (req, res)=>{
@@ -27,15 +25,10 @@ router.post('/login', async(req, res) => {
         const user = await Users.findOne({username: userName});
         const isMatch = bcrypt.compareSync(passWord, user.password);
         if (isMatch) {
-            // generate an access token
-            const accessToken = jwt.sign({ _id: user.id, username: user.username, role: user.role }, accessTokenSecret, { expiresIn: '24m' });
-            jwt.sign({ username: user.username, role: user.role }, refreshTokenSecret);
+            // generate an access token sending it as a cookie
+            const accessToken = jwt.sign({ _id: user.id, username: user.username, role: user.role }, accessTokenSecret, { expiresIn: '5m' });
             res.cookie('authtoken', accessToken, {maxAge:900000, httpOnly: true})
-            console.log(accessToken)
-            
-            //res.header('x-auth-token', accessToken)
             res.redirect('/RegisterPatient');
-            
 
         }else if (user.password != passWord){
             req.flash('status2', 'Invalid password, please try again');
@@ -81,12 +74,16 @@ router.get('/RegisterPatient', authenticateJWT, (req, res)=>{
 
 
 //logout
-router.get('/logout', (req, res) => {
-    const { token } = req.header('cookie');
-    refreshTokens = refreshTokens.filter(token => t !== token);
-
-    res.redirect("/login");
+router.get('/logout', function(req, res){
+    cookie = req.cookies;
+    for (var x in cookie) {
+        if (!cookie.hasOwnProperty(x)) {
+            continue;
+        }    
+        res.cookie(x, '', {expires: new Date(0)});
+    }
+    res.redirect('/login');
 });
 
-
-module.exports = router;
+module.exports = {authenticateJWT}
+module.exports = router

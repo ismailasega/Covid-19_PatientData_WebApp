@@ -49,7 +49,7 @@ app.use(bodyParser.json())
 app.use(express.static('public'));
 app.use(expressSession);
 app.use(flush());
-app.use(cookieParser())
+app.use(cookieParser());
 
 //Path
 app.set('view engine', 'pug');

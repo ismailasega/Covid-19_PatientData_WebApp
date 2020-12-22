@@ -7,39 +7,7 @@ const bcrypt = require('bcrypt');
 const PatientData = require('../models/PatientData');
 const Users = require('../models/Users');
 
-const authenticateJWT = require('../routes/loginroute')
-
-// //Login access token verification 
-// function authenticateJWT (req, res, next) {
-//     try{
-//         const token = req.cookies.authtoken
-//         console.log(token)
-//         if(!token){
-//             req.flash('status2', 'Access Denied');
-//             res.redirect('/login');
-//             return
-//         }
-//         else if (token) {
-//             jwt.verify(token, accessTokenSecret, (err, access) => {
-//                 if (err) {
-//                     req.flash('status2', 'Forbidden. Please enter credentials to proceed');
-//                     res.redirect("/login");
-//                 }else if (access.user){
-//                     req.user = access.user;
-//                     next();
-//                 }
-//         })
-//     }
-//     }catch (err) {
-//         req.flash('status2', 'Unauthorized, Please enter credentials to proceed');
-//         res.redirect("/login");
-//     }
-// }
-
-// //Patient registartion
-// router.get('/RegisterPatient', authenticateJWT, (req, res)=>{
-//         res.render('CovidForm_page'); 
-// });
+const authenticateJWT = require('./loginroute')
 
 
 //Creating Admin User credentials
@@ -58,7 +26,7 @@ router.post('/admin', async(req, res)=>{
         }
 });
   
-router.post('/RegData', authenticateJWT, async(req, res)=>{
+router.post('/RegData', async(req, res)=>{
     try{
         const patientsData = new PatientData(req.body);
         await patientsData.save();
@@ -71,13 +39,13 @@ router.post('/RegData', authenticateJWT, async(req, res)=>{
 })
 
 router.get('/patientData', authenticateJWT, async(req, res)=>{
-        try{
+    try{
         const patients = await PatientData.find();
         res.render('PatientData_page',{patients: patients, status: req.flash('status'), status2: req.flash('status2')});
-        }catch(err){
-            req.flash('status2', 'unable to retrive patient data');
-            res.redirect('back');
-        }
+    }catch(err){
+        req.flash('status2', 'unable to retrive patient data');
+        res.redirect('back');
+    }
 });
 
 //Deleting Patient Data

@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const jwt = require('jsonwebtoken');
 
 //hashing password
 const bcrypt = require('bcrypt');
@@ -7,8 +8,40 @@ const bcrypt = require('bcrypt');
 const PatientData = require('../models/PatientData');
 const Users = require('../models/Users');
 
-const authenticateJWT = require('./loginroute')
+//secret
+const accessTokenSecret = 'myaccess-secret';
 
+//Login access token verification 
+function authenticateJWT (req, res, next) {
+    try{
+        const token = req.cookies.authtoken
+        console.log(token)
+        if(!token){
+            req.flash('status2', 'Access Denied');
+            res.redirect('/login');
+            return
+        }
+        else if (token) {
+            jwt.verify(token , accessTokenSecret, (err, user) => {
+                if (err) {
+                    req.flash('status2', 'Forbidden. Please enter credentials to proceed');
+                    res.redirect("/login");
+                }
+                req.user = user;
+                next();
+                
+        })
+    }
+    }catch (err) {
+        req.flash('status2', 'Unauthorized, Please enter credentials to proceed');
+        res.redirect("/login");
+    }
+}
+
+//Patient registartion
+router.get('/RegisterPatient', authenticateJWT, (req, res)=>{
+        res.render('CovidForm_page'); 
+});
 
 //Creating Admin User credentials
 router.post('/admin', async(req, res)=>{
@@ -26,7 +59,7 @@ router.post('/admin', async(req, res)=>{
         }
 });
   
-router.post('/RegData', async(req, res)=>{
+router.post('/RegData', authenticateJWT, async(req, res)=>{
     try{
         const patientsData = new PatientData(req.body);
         await patientsData.save();
@@ -50,6 +83,12 @@ router.get('/patientData', authenticateJWT, async(req, res)=>{
 
 //Deleting Patient Data
 router.post('/deletePatient', authenticateJWT, async(req, res)=>{
+    const { role } = req.user
+    if(role !== 'admin'){
+        req.flash('status2', 'Not Authorized to delete Patient Data');
+        res.redirect('back');
+
+    }else if (role === 'admin'){
         try{
             await PatientData.deleteOne({_id: req.body.id});
             req.flash('status', 'Patient Data Deleted Succesfully');
@@ -58,6 +97,7 @@ router.post('/deletePatient', authenticateJWT, async(req, res)=>{
             req.flash('status2', 'unable to delete patient data');
             res.redirect('back');
         }
+    }
 });
 
 module.exports = router;

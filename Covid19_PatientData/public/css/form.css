@@ -105,7 +105,7 @@ fieldset label{
     position: absolute;
 	top:60px;
 	left: 0;
-	right: 0;
+    right: 0;
 	margin: auto;
     border-radius: 10px;
     box-shadow: 0 0 30px #00000077;
@@ -178,6 +178,6 @@ fieldset label{
     left:0;
     bottom: 0;
     margin: auto;
-    position: relative;
+    position: absolute;
     color: #000;
 }

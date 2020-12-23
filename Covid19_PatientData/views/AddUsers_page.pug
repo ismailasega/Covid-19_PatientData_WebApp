@@ -1,0 +1,44 @@
+meta(charset="UTF-8")
+meta(name="viewport", content="width=device-width,initial-scale=1")
+title Add User | MOH
+link(rel="stylesheet", type="text/css", href="/css/form.css")
+link(rel="stylesheet", type="text/css", href="/bootstrap/css/bootstrap.min.css")
+nav.fixed-top
+  ul
+    li
+      a.menu(href="/AddUser") Add User
+    li
+      a.menu(href="/RegisterPatient") Patient Data
+    li
+      a.logout(href="/logout") Logout
+.AddUser
+  .container
+    img(src='/images/form-header-image.png' width="420px")
+    .AddUserhead
+      p Ministry of Health
+      h5 User Credentials
+    if status.length
+      .alert.alert-success
+        strong Success!
+        |  #{status}
+    else if status2.length
+      .alert.alert-danger
+        strong Failed!
+        |  #{status2}
+    .AddUsercontent
+      form(action="/user" method="POST" autocomplete="off")
+        .form-row
+            label(for="inputusername") Username
+            input.form-control(type="text" name="username")
+        .form-row 
+            label(for="inputpassword") Password
+            input.form-control(type="password" name="password")
+        .form-row 
+            label(for="inputrole") Role
+            input.form-control(type="text" name="role" value="Receiptionist" readonly)    
+        hr
+        button.AddUserbtn1(type="submit") Add User
+      br
+
+script(src="https://code.jquery.com/jquery-3.5.1.slim.min.js", integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj", crossorigin="anonymous")
+script(src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js", integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx", crossorigin="anonymous")

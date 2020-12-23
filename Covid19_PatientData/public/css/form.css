@@ -23,7 +23,6 @@ nav{
 }
 
 nav ul{
-    float:right;
     list-style: none;
     margin-right: 20px;
 }
@@ -35,14 +34,31 @@ nav ul li{
 
 }
 
-nav ul li a{
+nav ul li a.logout{
     color: #fff;
+    float: right;
     font-size: 15px;
     padding: 6px 10px;
     font-weight: 500;
 }
 
-nav ul li a:hover{
+nav ul li a.logout:hover{
+    color: yellow;
+    text-decoration: none;
+    transition: -0.5s;
+}
+
+nav ul li a.menu{
+    color: #fff;
+    border-right: 1px solid #fff;
+    float: left;
+    font-size: 15px;
+    padding-left: 10px;
+    padding-right: 10px;
+    font-weight: 500;
+}
+
+nav ul li a.menu:hover{
     color: yellow;
     text-decoration: none;
     transition: -0.5s;
@@ -170,6 +186,49 @@ fieldset label{
 .text-color{
     color: #000;
 }
+
+/**Add User**/
+.Adduser {
+    width: 450px;
+    position: absolute;
+	top:80px;
+	left: 0;
+    right: 0;
+	margin: auto;
+    border-radius: 10px;
+    box-shadow: 0 0 30px #00000077;
+    background-color: rgba(255, 255, 255, 0.822);
+}
+.AddUsercontent{
+    width: 400px;
+    margin: auto;
+    height: auto;
+}
+
+.AddUserhead h5{
+    font-weight: bolder;
+    color: black;
+    font-size: 30px;
+}
+.AddUserhead {
+    text-align: center;
+    color: black;
+}
+
+.container{
+    padding-top: 30px;
+}
+
+.AddUserbtn1{
+    background-color: #000;
+    color: #fff;
+    font-size: 15px;
+    font-weight: bold;
+    border: 1px solid #000;
+    border-radius: 5px;
+    padding: 10px 165px 10px 165px;
+}
+
 
 /**Footer**/
 .copyright {

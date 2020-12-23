@@ -49,16 +49,42 @@ router.post('/admin', async(req, res)=>{
             const user = new Users(req.body);
             user.password = bcrypt.hashSync(req.body.password, 10);
             user.role='admin'
-            user.token=' '
             await user.save();
-                req.flash('status', 'User credentials created successfully, you can now login');
+                req.flash('status', 'Admin credentials created successfully, you can now login');
                 res.redirect('/login')
         }catch(err){
-            req.flash('status2', 'Failed to create user credentials');
+            req.flash('status2', 'Failed to create admin credentials');
             res.redirect("/login");
         }
 });
-  
+
+//Add User
+router.get('/AddUser', authenticateJWT, (req, res)=>{
+    const { role } = req.user
+    if(role !== 'admin'){
+        req.flash('status2', 'Not Authorized to Add Users');
+        res.redirect('back');
+
+    }else if (role === 'admin'){
+    res.render('AddUsers_page', {status: req.flash('status'), status2: req.flash('status2')});
+    } 
+});
+
+//Creating User credentials
+router.post('/user', authenticateJWT, async(req, res)=>{
+    try{
+        const user = new Users(req.body);
+        user.password = bcrypt.hashSync(req.body.password, 10);
+        await user.save();
+            req.flash('status', 'User credentials created successfully');
+            res.redirect('/AddUser')
+    }catch(err){
+        req.flash('status2', 'Failed to create user credentials');
+        res.redirect("/AddUser");
+    }
+});
+
+
 router.post('/RegData', authenticateJWT, async(req, res)=>{
     try{
         const patientsData = new PatientData(req.body);

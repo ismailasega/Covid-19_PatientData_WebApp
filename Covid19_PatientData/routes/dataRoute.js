@@ -45,17 +45,17 @@ router.get('/RegisterPatient', authenticateJWT, (req, res)=>{
 
 //Creating Admin User credentials
 router.post('/admin', async(req, res)=>{
-        try{
-            const user = new Users(req.body);
-            user.password = bcrypt.hashSync(req.body.password, 10);
-            user.role='admin'
-            await user.save();
-                req.flash('status', 'Admin credentials created successfully, you can now login');
-                res.redirect('/login')
-        }catch(err){
-            req.flash('status2', 'Failed to create admin credentials');
-            res.redirect("/login");
-        }
+    try{
+        const user = new Users(req.body);
+        user.password = bcrypt.hashSync(req.body.password, 10);
+        user.role='admin'
+        await user.save();
+            req.flash('status', 'Admin credentials created successfully, you can now login');
+            res.redirect('/login')
+    }catch(err){
+        req.flash('status2', 'Failed to create admin credentials');
+        res.redirect("/login");
+    }
 });
 
 //Add User
@@ -84,6 +84,7 @@ router.post('/user', authenticateJWT, async(req, res)=>{
     }
 });
 
+//Add Patient Data
 router.post('/RegData', authenticateJWT, async(req, res)=>{
     try{
         const patientsData = new PatientData(req.body);
@@ -96,6 +97,7 @@ router.post('/RegData', authenticateJWT, async(req, res)=>{
     }
 })
 
+//Displaying Patient Data(front-end(view))
 router.get('/patientData', authenticateJWT, async(req, res)=>{
     try{
         const patients = await PatientData.find();

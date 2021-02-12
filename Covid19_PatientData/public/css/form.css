@@ -153,6 +153,7 @@ fieldset label{
 .btn2{
     line-height: 15px;
     padding: 5px 5px 5px 5px;
+    float: left;
     border: 1px solid red;
     background-color: red;
     border-radius: 5px;
@@ -228,7 +229,18 @@ fieldset label{
     border-radius: 5px;
     padding: 10px 165px 10px 165px;
 }
+.btn7{
+    line-height: 15px;
+    padding: 5px 5px 5px 5px;
+    float: left;
+    border: 1px solid green;
+    background-color: green;
+    border-radius: 5px;
+}
 
+.btn7 .fa{
+    color: #fff;
+}
 
 /**Footer**/
 .copyright {
@@ -240,3 +252,4 @@ fieldset label{
     position: absolute;
     color: #000;
 }
+

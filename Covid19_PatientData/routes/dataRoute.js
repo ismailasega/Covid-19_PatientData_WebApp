@@ -84,7 +84,6 @@ router.post('/user', authenticateJWT, async(req, res)=>{
     }
 });
 
-
 router.post('/RegData', authenticateJWT, async(req, res)=>{
     try{
         const patientsData = new PatientData(req.body);
@@ -107,6 +106,25 @@ router.get('/patientData', authenticateJWT, async(req, res)=>{
     }
 });
 
+//Update FarmerOne Data
+router.post('/editPatient', authenticateJWT, async(req, res)=>{
+    const { role } = req.user
+    if(role !== 'admin'){
+        req.flash('status2', 'Not Authorized to delete Patient Data');
+        res.redirect('back');
+
+    }else if (role === 'admin'){
+    try{
+      await FarmerOne.findOneAndUpdate({_id: req.query.id}, req.body)
+      req.flash('status', 'Patient data updated succesfully')
+      res.redirect('back');
+    }catch(err){
+      req.flash('staus2', 'unable to update patient data, please try again!')
+      res.redirect('back')
+    }
+    }
+})
+  
 //Deleting Patient Data
 router.post('/deletePatient', authenticateJWT, async(req, res)=>{
     const { role } = req.user

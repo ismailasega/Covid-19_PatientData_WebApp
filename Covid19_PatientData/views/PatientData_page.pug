@@ -60,6 +60,9 @@ nav.fixed-top
                               td #{patient.residence}
                               td #{patient.createdAt}
                               td
+                                button.btn7(href="/editPatient"+patient._id)
+                                  i.fa.fa-pencil-square
+
                                 form(method="post" action='/deletePatient')
                                   input(type="hidden", name="id", value=patient._id)
                                   button.btn2(type="submit") 
